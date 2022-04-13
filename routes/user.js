@@ -73,42 +73,37 @@ router.post("/login", (req, res, next) => {
   })
   .catch(e=>{
     console.log(e)
-  
   })
 });
 router.get("/:id",
   async (req, res, next) => {
-      const user = await User.findOne({ username: req.params.id}).then(
-        (res) => {
-          res.status(200).json({
-            result: {
-              user:user,
-            }
-          });
-        }).catch((e) => {
-            res.status(404).json({
-              message:"User could not found."
-            });
-        });
+    await User.findOne({ username: req.params.id}).then((user) =>{
+      if(!user){
+        return res.status(404).json({
+          message: "User could not found."
+        })
+      }
+
+      return res.status(200).json({
+        message:"User found!",
+        user:user
+      })
+    })
 });
 router.delete("/:id",
   async (req, res, next) => {
-
-    const user = await User.findOneAndRemove({ username: req.params.id}).then(
-      (res) => {
-        res.status(200).json({
-          result: {
-            message:"User deleted!",
-            user:user,
-          }
-        });
-      }).catch(
-      (e) => {
-        res.status(404).json({
-          message:"User could not found."
-        });
+    await User.findOneAndRemove({ username: req.params.id}).then((user) => {
+      if(!user) {
+        return res.status(404).json({
+          message: "User could not found."
+        })
+      }else{
+        return res.status(200).json({
+          message:"User deleted from db successfully!",
+          user:user
+        })
       }
-    )
+    })
 });
 
 export default router
