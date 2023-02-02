@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 dotenv.config();
+// dot env is used to hide the connection url
 mongoose.Promise = global.Promise;
 
 // process.env.CONNECTION_URL comes from .env file
